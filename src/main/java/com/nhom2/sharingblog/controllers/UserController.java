@@ -13,8 +13,8 @@ public class UserController {
  @RequestMapping("/login")
 public String login( @RequestParam(value = "age", required = false) Integer age,
         @RequestParam(value = "name", required = false) String name) {
-    
-    return "hello woraaaa2d11";
+
+    return "hello word";
 }
 
 }
