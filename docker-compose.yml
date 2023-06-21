@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   mysqldb:
-    image: mysql:5.7
+    image: mysql:8
     restart: unless-stopped
     env_file: .env
     environment:
@@ -13,26 +13,26 @@ services:
     volumes:
       - db:/var/lib/mysql
 
-  phpmyadmin:
-    depends_on:
-      - mysqldb
-    image: phpmyadmin/phpmyadmin
-    links:
-      - mysqldb
-    environment:
-      PMA_HOST: mysqldb
-      PMA_PORT: $MYSQLDB_PORT
-      PMA_PASSWORD: $MYSQLDB_ROOT_PASSWORD
-      PMA_USER: $MYSQLDB_USER
-    restart: always
-    ports:
-      - 8081:80
+  #  phpmyadmin:
+  #    depends_on:
+  #      - mysqldb
+  #    image: phpmyadmin/phpmyadmin
+  #    links:
+  #      - mysqldb
+  #    environment:
+  #      PMA_HOST: mysqldb
+  #      PMA_PORT: $MYSQLDB_PORT
+  #      PMA_PASSWORD: $MYSQLDB_ROOT_PASSWORD
+  #      PMA_USER: $MYSQLDB_USER
+  #    restart: always
+  #    ports:
+  #      - 8081:80
   app:
     depends_on:
       - mysqldb
-    build: 
-        context: .
-        dockerfile: Dockerfile
+    build:
+      context: .
+      dockerfile: Dockerfile
     restart: on-failure
     env_file: .env
     ports:
