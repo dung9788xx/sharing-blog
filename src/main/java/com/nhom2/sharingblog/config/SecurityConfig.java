@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login")
+                        .requestMatchers("/api/auth/login")
                         .permitAll()
                         .anyRequest()
                         .authenticated()

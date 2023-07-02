@@ -13,20 +13,25 @@ services:
     volumes:
       - db:/var/lib/mysql
 
-  #  phpmyadmin:
-  #    depends_on:
-  #      - mysqldb
-  #    image: phpmyadmin/phpmyadmin
-  #    links:
-  #      - mysqldb
-  #    environment:
-  #      PMA_HOST: mysqldb
-  #      PMA_PORT: $MYSQLDB_PORT
-  #      PMA_PASSWORD: $MYSQLDB_ROOT_PASSWORD
-  #      PMA_USER: $MYSQLDB_USER
-  #    restart: always
-  #    ports:
-  #      - 8081:80
+  phpmyadmin:
+      depends_on:
+        - mysqldb
+      image: phpmyadmin/phpmyadmin
+      links:
+        - mysqldb
+      environment:
+        PMA_HOST: mysqldb
+        PMA_PORT: $MYSQLDB_PORT
+        PMA_PASSWORD: $MYSQLDB_ROOT_PASSWORD
+        PMA_USER: $MYSQLDB_USER
+      restart: always
+      ports:
+        - 8081:80
+  redis:
+    image: 'bitnami/redis:latest'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_PORT_NUMBER=$REDIS_PORT
   app:
     depends_on:
       - mysqldb
