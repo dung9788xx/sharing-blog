@@ -8,6 +8,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +24,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
+    @Autowired
+    private RedisTemplate redisTemplate;
     private final JpaUserDetailsService jpaUserDetailsService;
     private final JwtUtils jwtUtils;
 
@@ -30,9 +34,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String userEmail;
-        System.out.println(authHeader);
         String jwtToken = authHeader != null ? authHeader.substring(7) : null;
-        if (jwtToken == null) {
+        if (jwtToken == null || redisTemplate.opsForValue().get(jwtToken) !=null) {
             filterChain.doFilter(request, response);
             return;
         }
