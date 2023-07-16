@@ -45,6 +45,9 @@ public class User extends BaseEntity {
     @Column
     private Integer roleId;
 
+    @Column
+    private String name;
+
     public User() {
     }
 
@@ -148,5 +151,13 @@ public class User extends BaseEntity {
 
     public void setRoleId(Integer roleId) {
         this.roleId = roleId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
