@@ -1,0 +1,10 @@
+branch-defaults:
+  default:
+    environment: Sharing-blog-env
+environment-defaults:
+  Sharing-blog-env:
+    branch: null
+    repository: null
+global:
+deploy:
+  artifact: target/sharingblog-0.0.1-SNAPSHOT.jar
