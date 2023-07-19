@@ -11,14 +11,15 @@ name: Java CI with Maven
 on:
   push:
     branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+#  pull_request:
+#    branches: [ "master" ]
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    env:
+      DUNGTV_KEY: ${{ secrets.DUNGTV }}
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
@@ -29,4 +30,6 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package -Dmaven.test.skip --file pom.xml
+    - name: test
+      run: echo 123 && printenv
       
