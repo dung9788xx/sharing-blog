@@ -55,13 +55,11 @@ public class AuthController extends BaseController{
 
         try {
             HttpResponse httpResponse = HttpRequest.sendGet("https://oauth2.googleapis.com/tokeninfo?id_token=" + request.getCredential());
-            System.out.println("abcccccccccccccccccccccccc");
             if (httpResponse.getStatus() != HttpStatus.OK) {
                 return new APIResponse(HttpStatus.UNAUTHORIZED, "Error authenticating");
             }
             JSONObject responseJson = httpResponse.getJson();
             UserDetails user = jpaUserDetailsService.loadUserByUsername(responseJson.getString("email"));
-            System.out.println("abcccccccccccccccccccccccc");
             if (user == null) {
                 User newUser = new User();
                 newUser.setEmail(responseJson.getString("email"));
