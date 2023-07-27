@@ -1,15 +1,23 @@
 package com.nhom2.sharingblog.services;
 
+import com.nhom2.sharingblog.DTO.Auth.UserDTO;
+import com.nhom2.sharingblog.DTO.UpdateProfileDTO;
 import com.nhom2.sharingblog.entities.User;
 import com.nhom2.sharingblog.repositories.UserRepository;
 import com.nhom2.sharingblog.services.interfaces.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ModelMapper modelMapper;
     @Override
     public User getUserById(int id) {
         return userRepository.findById(id);
@@ -27,5 +35,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public User save(User user) {
         return userRepository.save(user);
+    }
+
+    @Override
+    public User updateProfile(UpdateProfileDTO updateProfileDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        User user = this.getUserByEmail(currentPrincipalName);
+        modelMapper.map(updateProfileDTO, user);
+        userRepository.save(user);
+        return user;
     }
 }

@@ -1,5 +1,7 @@
 package com.nhom2.sharingblog.services.interfaces;
 
+import com.nhom2.sharingblog.DTO.Auth.UserDTO;
+import com.nhom2.sharingblog.DTO.UpdateProfileDTO;
 import com.nhom2.sharingblog.entities.User;
 
 import java.util.List;
@@ -10,4 +12,6 @@ public interface UserService {
     public User getUserByEmail(String email);
 
     public User save(User user);
+
+    public User updateProfile(UpdateProfileDTO updateProfileDTO);
 }

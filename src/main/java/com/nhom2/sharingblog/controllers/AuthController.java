@@ -1,6 +1,7 @@
 package com.nhom2.sharingblog.controllers;
 
 import com.nhom2.sharingblog.DTO.Auth.UserDTO;
+import com.nhom2.sharingblog.DTO.UpdateProfileDTO;
 import com.nhom2.sharingblog.common.APIResponse;
 import com.nhom2.sharingblog.common.HttpRequest;
 import com.nhom2.sharingblog.common.HttpResponse;
@@ -11,6 +12,7 @@ import com.nhom2.sharingblog.services.interfaces.UserService;
 import com.nhom2.sharingblog.userSecurity.JpaUserDetailsService;
 import com.nhom2.sharingblog.userSecurity.UserSecurity;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
@@ -81,6 +83,13 @@ public class AuthController extends BaseController{
     public APIResponse getUser(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User user = userService.getUserByEmail(userDetails.getUsername());
+        UserDTO userResponse = modelMapper.map(user, UserDTO.class);
+        return new APIResponse(userResponse);
+    }
+
+    @PostMapping("/profile")
+    public APIResponse updateUser(@RequestBody @Valid UpdateProfileDTO updateProfileDTO) {
+        User user = userService.updateProfile(updateProfileDTO);
         UserDTO userResponse = modelMapper.map(user, UserDTO.class);
         return new APIResponse(userResponse);
     }
