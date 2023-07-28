@@ -12,10 +12,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class UpdateProfileDTO {
-    @NotEmpty(message = "Name is required")
+    @NotEmpty(message = "{not.empty}")
     private String name;
-    @NotNull(message = "Gender is required") @Min(0) @Max(1)
+    @NotNull(message = "{not.null}") @Min(0) @Max(1)
     private Integer gender;
-    @NotEmpty(message = "Address is required")
+    @NotEmpty()
     private String address;
 }
