@@ -1,6 +1,7 @@
 package com.nhom2.sharingblog.userSecurity;
 
 import com.nhom2.sharingblog.entities.User;
+import com.nhom2.sharingblog.enums.Roles;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,7 +22,7 @@ public class UserSecurity implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
-        list.add(new SimpleGrantedAuthority( "ROLE_ADMIN"));
+        list.add(new SimpleGrantedAuthority(user.getRole().getCode()));
         return list;
     }
 
