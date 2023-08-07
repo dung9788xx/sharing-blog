@@ -4,9 +4,7 @@
  */
 package com.nhom2.sharingblog.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -42,8 +40,6 @@ public class User extends BaseEntity {
     private Date dob;
     @Column
     private String address;
-    @Column
-    private Integer roleId;
 
     @Column
     private String name;
@@ -51,7 +47,19 @@ public class User extends BaseEntity {
     public User() {
     }
 
-    public User(String username, String email, String password, Boolean emailVerified, Integer following, Integer follower, String avatar, Integer gender, Date dob, String address, Integer roleId) {
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    @ManyToOne()
+    @JoinColumn(name = "roleId")
+    private Role role;
+
+    public User(String username, String email, String password, Boolean emailVerified, Integer following, Integer follower, String avatar, Integer gender, Date dob, String address) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -62,7 +70,6 @@ public class User extends BaseEntity {
         this.gender = gender;
         this.dob = dob;
         this.address = address;
-        this.roleId = roleId;
     }
 
     public String getUsername() {
@@ -143,14 +150,6 @@ public class User extends BaseEntity {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public Integer getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
     }
 
     public String getName() {

@@ -1,5 +1,6 @@
 package com.nhom2.sharingblog.config;
 
+import com.nhom2.sharingblog.enums.Roles;
 import com.nhom2.sharingblog.services.UserServiceImpl;
 import com.nhom2.sharingblog.services.interfaces.UserService;
 import com.nhom2.sharingblog.userSecurity.JpaUserDetailsService;
@@ -35,6 +36,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/login")
                         .permitAll()
+                        .requestMatchers("/api/admin/*")
+                        .hasAuthority(Roles.ROLE_ADMIN.toString())
                         .anyRequest()
                         .authenticated()
                 )
