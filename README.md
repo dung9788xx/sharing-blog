@@ -16,6 +16,8 @@ After docker build success application will run at:
 ```agsl
 http://localhost:6868
 ```
+## API DOCUMENT
+http://localhost:6868/swagger-ui/index.html
 ## Configuration auto build with Intellij IDEA
 ```agsl
 File => Settings => Build, Execution, Deployment => Complier
