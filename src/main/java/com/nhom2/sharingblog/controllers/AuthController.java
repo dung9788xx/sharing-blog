@@ -95,7 +95,7 @@ public class AuthController extends BaseController{
     public APIResponse updateUser(@Valid UpdateProfileDTO updateProfileDTO,@RequestPart(value = "file") MultipartFile multipartFile) {
         User user = userService.updateProfile(updateProfileDTO);
         UserDTO userResponse = modelMapper.map(user, UserDTO.class);
-        this.amazonClient.uploadFile(multipartFile);
+        this.amazonClient.uploadFile(multipartFile, "avatar/" + user.getId() + "/");
         return new APIResponse(userResponse);
     }
 

@@ -20,13 +20,13 @@ import java.util.Date;
 public class AmazonClient {
     private AmazonS3 s3client;
 
-    @Value("${amazonProperties.endpointUrl}")
+    @Value("${S3_ENDPOINT}")
     private String endpointUrl;
-    @Value("${amazonProperties.bucketName}")
+    @Value("${S3_BUCKETNAME}")
     private String bucketName;
-    @Value("${amazonProperties.accessKey}")
+    @Value("${S3_ACCESSKEY}")
     private String accessKey;
-    @Value("${amazonProperties.secretKey}")
+    @Value("${S3_SECRETKEY}")
     private String secretKey;
 
     @PostConstruct
@@ -53,17 +53,19 @@ public class AmazonClient {
         s3client.putObject(new PutObjectRequest(bucketName, fileName, file)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
     }
-    public void uploadFile(MultipartFile multipartFile) {
+    public String uploadFile(MultipartFile multipartFile, String destination) {
 
         String fileUrl = "";
         try {
             File file = convertMultiPartToFile(multipartFile);
             String fileName = generateFileName(multipartFile);
-            fileUrl = endpointUrl + "/" + bucketName + "/" + fileName;
-            uploadFileTos3bucket(fileName, file);
+            fileUrl = endpointUrl + "/" + bucketName + "/" + destination + fileName;
+            uploadFileTos3bucket(destination+fileName, file);
             file.delete();
+            return fileUrl;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return "";
     }
 }
