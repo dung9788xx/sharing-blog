@@ -48,7 +48,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING.DATASOURCE.DRIVER-CLASS-NAME=com.mysql.cj.jdbc.Driver
       - spring.jpa.properties.hibernate.dialect=com.nhom2.sharingblog.config.CustomDialect
-      - SPRING_JPA_HIBERNATE_DDL-AUTO=update
+      - SPRING_JPA_HIBERNATE_DDL-AUTO=none
       - SPRING_JPA_SHOW-SQL= true
     volumes:
       - .:/app

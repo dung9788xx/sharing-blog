@@ -8,6 +8,7 @@ import com.nhom2.sharingblog.common.HttpResponse;
 import com.nhom2.sharingblog.config.JwtUtils;
 import com.nhom2.sharingblog.entities.User;
 import com.nhom2.sharingblog.request.AuthenticationRequest;
+import com.nhom2.sharingblog.services.AmazonClient;
 import com.nhom2.sharingblog.services.interfaces.UserService;
 import com.nhom2.sharingblog.userSecurity.JpaUserDetailsService;
 import com.nhom2.sharingblog.userSecurity.UserSecurity;
@@ -27,6 +28,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -48,10 +50,12 @@ public class AuthController extends BaseController{
     private ModelMapper modelMapper;
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private AmazonClient amazonClient;
+
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final JpaUserDetailsService jpaUserDetailsService;
-
     @PostMapping("/login")
     public APIResponse authenticate(@RequestBody AuthenticationRequest request, HttpServletResponse response) {
 
@@ -88,9 +92,10 @@ public class AuthController extends BaseController{
     }
 
     @PostMapping("/profile")
-    public APIResponse updateUser(@RequestBody @Valid UpdateProfileDTO updateProfileDTO) {
+    public APIResponse updateUser(@Valid UpdateProfileDTO updateProfileDTO,@RequestPart(value = "file") MultipartFile multipartFile) {
         User user = userService.updateProfile(updateProfileDTO);
         UserDTO userResponse = modelMapper.map(user, UserDTO.class);
+        this.amazonClient.uploadFile(multipartFile, "avatar/" + user.getId() + "/");
         return new APIResponse(userResponse);
     }
 
