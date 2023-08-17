@@ -50,9 +50,6 @@ public class AuthController extends BaseController{
     private ModelMapper modelMapper;
     @Autowired
     private RedisTemplate redisTemplate;
-    @Autowired
-    private AmazonClient amazonClient;
-
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final JpaUserDetailsService jpaUserDetailsService;
@@ -92,10 +89,16 @@ public class AuthController extends BaseController{
     }
 
     @PostMapping("/profile")
-    public APIResponse updateUser(@Valid UpdateProfileDTO updateProfileDTO,@RequestPart(value = "file") MultipartFile multipartFile) {
+    public APIResponse updateUser(@Valid UpdateProfileDTO updateProfileDTO) {
         User user = userService.updateProfile(updateProfileDTO);
         UserDTO userResponse = modelMapper.map(user, UserDTO.class);
-        this.amazonClient.uploadFile(multipartFile, "avatar/" + user.getId() + "/");
+        return new APIResponse(userResponse);
+    }
+
+    @PostMapping("/profile/avatar")
+    public APIResponse updateAvatar(@RequestPart(value = "file") MultipartFile multipartFile) {
+        User user = userService.updateAvatar(multipartFile);
+        UserDTO userResponse = modelMapper.map(user, UserDTO.class);
         return new APIResponse(userResponse);
     }
 

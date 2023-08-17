@@ -59,7 +59,7 @@ public class AmazonClient {
         try {
             File file = convertMultiPartToFile(multipartFile);
             String fileName = generateFileName(multipartFile);
-            fileUrl = endpointUrl + "/" + bucketName + "/" + destination + fileName;
+            fileUrl = endpointUrl + "/" + destination + fileName;
             uploadFileTos3bucket(destination+fileName, file);
             file.delete();
             return fileUrl;

@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -18,6 +19,8 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private AmazonClient amazonClient;
     @Override
     public User getUserById(int id) {
         return userRepository.findById(id);
@@ -43,6 +46,16 @@ public class UserServiceImpl implements UserService {
         String currentPrincipalName = authentication.getName();
         User user = this.getUserByEmail(currentPrincipalName);
         modelMapper.map(updateProfileDTO, user);
+        userRepository.save(user);
+        return user;
+    }
+
+    @Override
+    public User updateAvatar(MultipartFile multipartFile) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        User user = this.getUserByEmail(currentPrincipalName);
+        user.setAvatar(this.amazonClient.uploadFile(multipartFile, "avatar/" + user.getId() + "/"));
         userRepository.save(user);
         return user;
     }
